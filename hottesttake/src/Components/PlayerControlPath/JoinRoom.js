@@ -1,5 +1,7 @@
 import React from 'react';
+import * as firebase from 'firebase';
 import PlayerControls from './PlayerControls';
+import { db } from '../../firebase';
 
 class JoinRoom extends React.Component {
 	constructor() {
@@ -7,14 +9,36 @@ class JoinRoom extends React.Component {
 		this.state = {
 			name: '',
 			roomCode: '',
-			roomInfo: false
+			roomInfo: false,
+			test: []
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
-	handleSubmit(e) {
+	async componentDidMount() {
+		try {
+			let test = [];
+			db.ref('prompts').on('value', (snapshot) => {
+				snapshot.forEach((snap) => {
+					test.push(snap.val());
+				});
+			});
+			this.setState({ test });
+		} catch (error) {
+			console.log(error);
+		}
+	}
+	async handleSubmit(e) {
 		e.preventDefault();
 		if (this.state.roomCode === '123') {
+			try {
+				await db.ref('games').push({
+					name: this.state.name,
+					roomCode: this.state.roomCode
+				});
+			} catch (error) {
+				console.log(error);
+			}
 			this.setState({ roomInfo: true });
 		}
 	}
@@ -30,7 +54,7 @@ class JoinRoom extends React.Component {
 				<header className="App-header">
 					{!this.state.roomInfo ? (
 						<div>
-							<p>Join a room:</p>
+							Join a room:
 							<form onSubmit={this.handleSubmit}>
 								<label>
 									Name:
