@@ -16,7 +16,6 @@ class JoinRoom extends React.Component {
 		e.preventDefault();
 		if (this.state.roomCode === '123') {
 			this.setState({ roomInfo: true });
-			this.props.handleHome();
 		}
 	}
 	handleChange(e) {
