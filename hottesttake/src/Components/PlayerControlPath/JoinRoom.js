@@ -51,7 +51,8 @@ class JoinRoom extends React.Component {
 		const newTestKey = db.ref().child('games').push().key;
 		console.log('new test key', newTestKey);
 		return (
-			<div className="WaitingRoom">
+			<div className="JoinRoom">
+				<div>{this.state.game}</div>
 				<header className="App-header">
 					{!this.state.roomInfo ? (
 						<div>

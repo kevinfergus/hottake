@@ -25,8 +25,14 @@ class WaitingRoom extends React.Component {
 			console.log(error);
 		}
 	}
-	handleSubmit(e) {
+	async handleSubmit(e) {
 		e.preventDefault();
+		try {
+			db.ref(`games/${this.props.code}/state/`).update({ status: 'started' });
+			this.setState({ allPlayers: true });
+		} catch (error) {
+			console.log(error);
+		}
 		this.setState({ allPlayers: true });
 	}
 	render() {

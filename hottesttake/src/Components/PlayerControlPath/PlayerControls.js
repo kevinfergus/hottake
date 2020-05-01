@@ -5,7 +5,7 @@ class PlayerControls extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			game: {}
+			status: ''
 		};
 	}
 
@@ -17,15 +17,18 @@ class PlayerControls extends React.Component {
 					game.push(snap.val());
 				});
 				game = game[0];
-				this.setState({ game });
+				this.setState({ status: game.status });
 			});
 		} catch (error) {
 			console.log(error);
 		}
 	}
 	render() {
-		console.log('game', this.state.game);
-		return <div className="App-header">These are your player controls, hang out till the game starts</div>;
+		if (this.state.status === 'waitingRoom') {
+			return <div>You're all sit, hang out till everyone joins</div>;
+		} else {
+			return <div>Let's get going!</div>;
+		}
 	}
 }
 export default PlayerControls;
