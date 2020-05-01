@@ -79,7 +79,7 @@ class JoinRoom extends React.Component {
 							</form>
 						</div>
 					) : (
-						<PlayerControls home={this.props.home} />
+						<PlayerControls code={this.state.roomCode} />
 					)}
 				</header>
 			</div>
