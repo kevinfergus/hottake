@@ -18,7 +18,7 @@ class WaitingRoom extends React.Component {
 			<div>
 				{!this.state.allPlayers ? (
 					<div>
-						When all the players have joined, press the button!
+						This is your code: 123 Players: When all the players have joined, press the button!
 						<input type="submit" value="Everyones in!" onClick={(e) => this.handleSubmit(e)} />
 					</div>
 				) : (

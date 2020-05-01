@@ -14,7 +14,10 @@ class JoinRoom extends React.Component {
 	}
 	handleSubmit(e) {
 		e.preventDefault();
-		this.setState({ roomInfo: true });
+		if (this.state.roomCode === '123') {
+			this.setState({ roomInfo: true });
+			this.props.handleHome();
+		}
 	}
 	handleChange(e) {
 		this.setState({
@@ -28,7 +31,7 @@ class JoinRoom extends React.Component {
 				<header className="App-header">
 					{!this.state.roomInfo ? (
 						<div>
-							Join a room:
+							<p>Join a room:</p>
 							<form onSubmit={this.handleSubmit}>
 								<label>
 									Name:
@@ -52,7 +55,7 @@ class JoinRoom extends React.Component {
 							</form>
 						</div>
 					) : (
-						<PlayerControls />
+						<PlayerControls home={this.props.home} />
 					)}
 				</header>
 			</div>

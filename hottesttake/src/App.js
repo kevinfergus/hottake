@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { useObjectVal } from 'react-firebase-hooks/database';
-import firebase from 'firebase';
 import logo from './logo.svg';
 import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-import JoinRoom from './Components/JoinRoom';
-import WaitingRoom from './Components/WaitingRoom';
+import JoinRoom from './Components/PlayerControlPath/JoinRoom';
+import WaitingRoom from './Components/HostPath/WaitingRoom';
+import GameRoom from './Components/HostPath/GameRoom';
+import * as firebase from 'firebase';
 import './App.css';
 const config = {
 	apiKey: 'AIzaSyDx900bEhFzPhnKIUnHUyy-TaWRQnNPu04',
@@ -19,41 +20,64 @@ const config = {
 
 const fire = firebase.initializeApp(config);
 
-const db = fire.database();
-let prompts;
+// const db = fire.database();
+// let prompts;
 
-fire.database().ref('prompts').once('value').then((snapshot) => {
-	prompts = snapshot.val();
-});
+// fire.database().ref('prompts').once('value').then((snapshot) => {
+// 	prompts = snapshot.val();
+// });
+// const [ prompt, loading, error ] = useObjectVal(db.ref('prompts'));
+// const [ started, setStarted ] = useState(false);
+// const [ home, setHome ] = useState(false);
+// if (loading) return 'loading';
+// if (error) return 'error”';
 
-const App = () => {
-	const [ prompt, loading, error ] = useObjectVal(db.ref('prompts'));
-	if (loading) return 'loading';
-	if (error) return 'error”';
-	console.log('prompts', prompt);
-	// useEffect(() => {
-	// 	fire.database().ref('prompts').set({
-	// 		test: 'testing'
-	// 	});
-	// }, []);
+class App extends React.Component {
+	// const [ prompt, loading, error ] = useObjectVal(db.ref('prompts'));
+	// const [ started, setStarted ] = useState(false);
+	// const [ home, setHome ] = useState(false);
+	// if (loading) return 'loading';
+	// if (error) return 'error”';
+	constructor() {
+		super();
+		this.state = {
+			started: false,
+			home: true
+		};
+		this.handleHome = this.handleHome.bind(this);
+	}
+	handleClick() {
+		this.setState({ started: true });
+	}
+	handleHome() {
+		this.setState({ home: false });
+	}
 
-	return (
-		<Router>
+	render() {
+		return (
 			<div>
-				<header className="App-header">
-					<img src={logo} className="App-logo" alt="logo" />
-					<p>HOT TAKE</p>{' '}
+				{!this.state.started && this.state.home ? (
 					<div>
-						Start a game <JoinRoom />
+						{' '}
+						<header className="App-header">
+							<img src={logo} className="App-logo" alt="logo" />
+							<p>HOT TAKE</p>
+							<p>
+								Start a game:{' '}
+								<input type="submit" value="New game" onClick={(e) => this.handleClick(e)} />
+								<JoinRoom handleHome={this.handleHome} />
+							</p>
+						</header>
 					</div>
-				</header>
-				<Switch>
-					/>
-					<Route path="/waitingRoom" component={WaitingRoom} />
-				</Switch>
+				) : (
+					<div>
+						{' '}
+						<GameRoom />
+					</div>
+				)}
 			</div>
-		</Router>
-	);
-};
+		);
+	}
+}
 
 export default App;

@@ -5,7 +5,7 @@ class GameRoom extends React.Component {
 		super();
 	}
 	render() {
-		return <div>This is the game room</div>;
+		return <div className="App-header">This is the game room, use code 123 to join</div>;
 	}
 }
 
