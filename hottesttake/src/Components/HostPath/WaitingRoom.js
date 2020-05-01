@@ -14,7 +14,7 @@ class WaitingRoom extends React.Component {
 
 	async componentDidMount() {
 		try {
-			db.ref('games').on('value', (snapshot) => {
+			db.ref(`games/${this.props.code}/state/players`).on('value', (snapshot) => {
 				let players = [];
 				snapshot.forEach((snap) => {
 					players.push(snap.val());
@@ -30,13 +30,14 @@ class WaitingRoom extends React.Component {
 		this.setState({ allPlayers: true });
 	}
 	render() {
+		console.log('players', this.state.players);
 		return (
 			<div>
 				{!this.state.allPlayers ? (
 					<div className="App-header">
-						This is your code: 123 Players: When all the players have joined, press the button!
+						This is your code: {this.props.code}. When all the players have joined, press the button!
 						<input type="submit" value="Everyones in!" onClick={(e) => this.handleSubmit(e)} />
-						<div className="players">
+						Players:<div className="players">
 							{this.state.players.map((player) => {
 								return <div key={player.name}>{player.name}</div>;
 							})}

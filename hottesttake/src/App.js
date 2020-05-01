@@ -22,16 +22,18 @@ class App extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			started: false
+			started: false,
+			code: Math.random().toString(36).substring(6, 10) + Math.random().toString(36).substring(6, 7)
 		};
 	}
 	async handleClick(e) {
 		e.preventDefault();
 		try {
-			await db.ref('games').push({
-				players: null,
-				gameState: 'waiting',
-				roomCode: 123
+			await db.ref('games').child(`${this.state.code}`).set({
+				state: {
+					status: 'waitingRoom',
+					players: { player0: 'well store players here' }
+				}
 			});
 		} catch (error) {
 			console.log(error);
@@ -40,7 +42,6 @@ class App extends React.Component {
 	}
 
 	render() {
-		console.log(this.state);
 		return (
 			<div>
 				{!this.state.started ? (
@@ -57,7 +58,7 @@ class App extends React.Component {
 						</header>
 					</div>
 				) : (
-					<WaitingRoom />
+					<WaitingRoom code={this.state.code} />
 				)}
 			</div>
 		);

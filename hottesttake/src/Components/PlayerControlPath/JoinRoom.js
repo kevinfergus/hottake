@@ -30,17 +30,15 @@ class JoinRoom extends React.Component {
 	}
 	async handleSubmit(e) {
 		e.preventDefault();
-		if (this.state.roomCode === '123') {
-			try {
-				await db.ref('games').push({
-					name: this.state.name,
-					roomCode: this.state.roomCode
-				});
-			} catch (error) {
-				console.log(error);
-			}
-			this.setState({ roomInfo: true });
+
+		try {
+			await db.ref(`games/${this.state.roomCode}/state/players`).update({
+				[this.state.name]: { name: this.state.name, score: 0 }
+			});
+		} catch (error) {
+			console.log(error);
 		}
+		this.setState({ roomInfo: true });
 	}
 	handleChange(e) {
 		this.setState({
@@ -49,6 +47,9 @@ class JoinRoom extends React.Component {
 	}
 
 	render() {
+		console.log(this.state.roomCode);
+		const newTestKey = db.ref().child('games').push().key;
+		console.log('new test key', newTestKey);
 		return (
 			<div className="WaitingRoom">
 				<header className="App-header">
