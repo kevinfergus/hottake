@@ -5,13 +5,11 @@ class GameRoom extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			prompts: [],
-			status: ''
+			status: '',
+			pairs: []
 		};
 	}
 	async componentDidMount() {
-		///I want to get the prompts, make them the prompts on the game object in fire base, then tie
-		///that to the state in this component
 		try {
 			db.ref(`games/${this.props.code}/state/status`).on('value', (snapshot) => {
 				this.setState({ status: snapshot.val() });
@@ -19,11 +17,23 @@ class GameRoom extends React.Component {
 		} catch (error) {
 			console.log(error);
 		}
-		// for(let i = 0; i <this.props.players.length; i ++) {
-		// 	this.
-		// }
+		let pairs = [];
+
+		let pairObj = {};
+
+		for (let i = 0; i < this.props.players.length; i++) {
+			if (i % 2 === 0) {
+				pairObj.player1 = this.props.players[i];
+			} else {
+				pairObj.player2 = this.props.players[i];
+				pairs.push(pairObj);
+				pairObj = {};
+			}
+		}
+		///loop through the pair object, do a .child type of thing to set it with "players"
 	}
 	render() {
+		console.log('state in game room', this.state);
 		if (this.state.status === '') {
 			return <div className="App-header">Loading</div>;
 		} else if (this.state.status === 'answering') {
