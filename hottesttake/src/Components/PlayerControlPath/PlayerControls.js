@@ -7,7 +7,8 @@ class PlayerControls extends React.Component {
 		super();
 		this.state = {
 			status: '',
-			prompts: []
+			prompts: [],
+			promptToAnswer: 'Paris'
 		};
 	}
 
@@ -30,18 +31,19 @@ class PlayerControls extends React.Component {
 				snapshot.forEach((snap) => {
 					promptsOnDb.push(snap.val());
 				});
-
 				this.setState({ prompts: promptsOnDb });
+				this.setState({ promptToAnswer: promptsOnDb[1] });
 			});
 		} catch (error) {
 			console.log(error);
 		}
 	}
 	render() {
+		console.log(this.state, 'state on player controls');
 		if (this.state.status === 'waitingRoom') {
 			return <div>You're all sit, hang out till everyone joins</div>;
 		} else if (this.state.status === 'answering') {
-			return <TakeAnswer />;
+			return <TakeAnswer prompt={this.state.promptToAnswer.prompt} />;
 		} else {
 			return <div>Let's get going!</div>;
 		}

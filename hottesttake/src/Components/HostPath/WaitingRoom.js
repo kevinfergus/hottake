@@ -7,7 +7,8 @@ class WaitingRoom extends React.Component {
 		super();
 		this.state = {
 			allPlayers: false,
-			players: []
+			players: [],
+			prompts: []
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
@@ -24,6 +25,34 @@ class WaitingRoom extends React.Component {
 		} catch (error) {
 			console.log(error);
 		}
+		let prompts = [];
+		try {
+			db.ref(`prompts/`).on('value', (snapshot) => {
+				snapshot.forEach((snap) => {
+					prompts.push(snap.val());
+				});
+			});
+		} catch (error) {
+			console.log(error);
+		}
+
+		try {
+			db.ref(`games/${this.props.code}/state`).child('prompts').set(prompts);
+		} catch (error) {
+			console.log(error);
+		}
+		try {
+			db.ref(`games/${this.props.code}/state/prompts`).on('value', (snapshot) => {
+				let promptsOnDb = [];
+				snapshot.forEach((snap) => {
+					promptsOnDb.push(snap.val());
+				});
+
+				this.setState({ prompts: promptsOnDb });
+			});
+		} catch (error) {
+			console.log(error);
+		}
 	}
 	async handleSubmit(e) {
 		e.preventDefault();
@@ -36,6 +65,7 @@ class WaitingRoom extends React.Component {
 		this.setState({ allPlayers: true });
 	}
 	render() {
+		console.log('state in waiting room', this.state);
 		return (
 			<div>
 				{!this.state.allPlayers ? (
@@ -49,7 +79,7 @@ class WaitingRoom extends React.Component {
 						</div>
 					</div>
 				) : (
-					<GameRoom players={this.state.players} code={this.props.code} />
+					<GameRoom players={this.state.players} code={this.props.code} prompts={this.state.prompts} />
 				)}
 			</div>
 		);
