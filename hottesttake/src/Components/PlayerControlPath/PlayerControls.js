@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import TakeAnswer from './TakeAnswer';
 import { db } from '../../firebase';
 
 class PlayerControls extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			status: ''
+			status: '',
+			prompts: []
 		};
 	}
 
@@ -22,10 +24,24 @@ class PlayerControls extends React.Component {
 		} catch (error) {
 			console.log(error);
 		}
+		try {
+			db.ref(`games/${this.props.code}/state/prompts`).on('value', (snapshot) => {
+				let promptsOnDb = [];
+				snapshot.forEach((snap) => {
+					promptsOnDb.push(snap.val());
+				});
+
+				this.setState({ prompts: promptsOnDb });
+			});
+		} catch (error) {
+			console.log(error);
+		}
 	}
 	render() {
 		if (this.state.status === 'waitingRoom') {
 			return <div>You're all sit, hang out till everyone joins</div>;
+		} else if (this.state.status === 'answering') {
+			return <TakeAnswer />;
 		} else {
 			return <div>Let's get going!</div>;
 		}

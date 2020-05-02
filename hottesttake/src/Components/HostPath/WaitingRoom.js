@@ -28,7 +28,7 @@ class WaitingRoom extends React.Component {
 	async handleSubmit(e) {
 		e.preventDefault();
 		try {
-			db.ref(`games/${this.props.code}/state/`).update({ status: 'started' });
+			db.ref(`games/${this.props.code}/state/`).update({ status: 'answering' });
 			this.setState({ allPlayers: true });
 		} catch (error) {
 			console.log(error);
@@ -36,7 +36,6 @@ class WaitingRoom extends React.Component {
 		this.setState({ allPlayers: true });
 	}
 	render() {
-		console.log('players', this.state.players);
 		return (
 			<div>
 				{!this.state.allPlayers ? (
@@ -50,7 +49,7 @@ class WaitingRoom extends React.Component {
 						</div>
 					</div>
 				) : (
-					<GameRoom />
+					<GameRoom players={this.state.players} code={this.props.code} />
 				)}
 			</div>
 		);

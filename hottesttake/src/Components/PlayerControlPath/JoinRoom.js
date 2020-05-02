@@ -52,7 +52,6 @@ class JoinRoom extends React.Component {
 		console.log('new test key', newTestKey);
 		return (
 			<div className="JoinRoom">
-				<div>{this.state.game}</div>
 				<header className="App-header">
 					{!this.state.roomInfo ? (
 						<div>
