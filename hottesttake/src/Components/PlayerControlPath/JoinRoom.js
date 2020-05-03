@@ -49,7 +49,8 @@ class JoinRoom extends React.Component {
 	render() {
 		console.log(this.state.roomCode);
 		const newTestKey = db.ref().child('games').push().key;
-		console.log('new test key', newTestKey);
+		const name = this.state.name;
+		console.log('name in join room', name);
 		return (
 			<div className="JoinRoom">
 				<header className="App-header">
@@ -79,7 +80,7 @@ class JoinRoom extends React.Component {
 							</form>
 						</div>
 					) : (
-						<PlayerControls code={this.state.roomCode} />
+						<PlayerControls code={this.state.roomCode} player={name} />
 					)}
 				</header>
 			</div>

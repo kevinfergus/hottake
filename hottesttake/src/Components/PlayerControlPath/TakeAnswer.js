@@ -8,6 +8,8 @@ export default class TakeAnswer extends React.Component {
 			prompt: ''
 		};
 	}
+
+	componentDidMount() {}
 	async handleSubmit(e) {
 		e.preventDefault();
 	}
@@ -18,6 +20,7 @@ export default class TakeAnswer extends React.Component {
 	}
 
 	render() {
+		console.log(this.props, 'props in take answer');
 		if (this.state.prompt === '') {
 			return <div />;
 		} else {

@@ -17,23 +17,31 @@ class GameRoom extends React.Component {
 		} catch (error) {
 			console.log(error);
 		}
+
 		let pairs = [];
 
 		let pairObj = {};
+		console.log(this.props.players, 'players in game room');
 
-		for (let i = 0; i < this.props.players.length; i++) {
+		const players = this.props.players;
+
+		for (let i = 0; i < players.length; i++) {
 			if (i % 2 === 0) {
-				pairObj.player1 = this.props.players[i];
+				pairObj.player1 = players[i];
 			} else {
-				pairObj.player2 = this.props.players[i];
+				pairObj.player2 = players[i];
 				pairs.push(pairObj);
 				pairObj = {};
 			}
 		}
-		///loop through the pair object, do a .child type of thing to set it with "players"
+		console.log(pairs, 'pairs in game room componenddidmount');
+		for (let i = 0; i < pairs.length; i++) {
+			db.ref(`games/${this.props.code}/state/prompts/${i}`).child('players').set({
+				players: pairs[i]
+			});
+		}
 	}
 	render() {
-		console.log('state in game room', this.state);
 		if (this.state.status === '') {
 			return <div className="App-header">Loading</div>;
 		} else if (this.state.status === 'answering') {

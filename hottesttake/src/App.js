@@ -31,8 +31,7 @@ class App extends React.Component {
 		try {
 			await db.ref('games').child(`${this.state.code}`).set({
 				state: {
-					status: 'waitingRoom',
-					players: { player0: 'well store players here' }
+					status: 'waitingRoom'
 				}
 			});
 		} catch (error) {
