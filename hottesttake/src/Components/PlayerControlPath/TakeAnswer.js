@@ -5,11 +5,14 @@ export default class TakeAnswer extends React.Component {
 		super(props);
 		this.state = {
 			answer: '',
-			prompt: ''
+			prompt: {},
+			answered: false
 		};
 	}
 
-	componentDidMount() {}
+	componentDidMount() {
+		setTimeout(function() {}, 6000);
+	}
 	async handleSubmit(e) {
 		e.preventDefault();
 	}
@@ -18,15 +21,33 @@ export default class TakeAnswer extends React.Component {
 			[e.target.name]: e.target.value
 		});
 	}
+	handleClick(e) {
+		e.preventDefault();
+		for (let i = 0; i < this.props.prompts.length; i++) {
+			if (this.props.prompts[i].players.players.player1.name === this.props.player) {
+				this.setState({ prompt: this.props.prompts[i] });
+				break;
+			}
+			if (this.props.prompts[i].players.players.player2.name === this.props.player) {
+				this.setState({ prompt: this.props.prompts[i] });
+				break;
+			}
+		}
+	}
 
 	render() {
-		console.log(this.props, 'props in take answer');
-		if (this.state.prompt === '') {
-			return <div />;
+		console.log(this.props.prompts, 'this.props.prompts');
+		console.log('state in take answer', this.state);
+		if (this.state.answer === '') {
+			return (
+				<button type="submit" onClick={(e) => this.handleClick(e)}>
+					Click me!
+				</button>
+			);
 		} else {
 			return (
 				<div className="App-header">
-					Give me your hottest take on {this.props.prompt}
+					Give me your hottest take on {this.state.prompt.prompt}
 					<form onSubmit={(e) => this.handleSubmit(e)}>
 						<input
 							type="text"

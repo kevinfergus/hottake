@@ -37,11 +37,6 @@ class PlayerControls extends React.Component {
 		} catch (error) {
 			console.log(error);
 		}
-		let playersForPrompts;
-
-		if (this.state.prompts.length > 0) {
-			playersForPrompts = this.state.prompts;
-		}
 
 		for (let i = 0; i < this.state.prompts; i++) {
 			if (this.state.prompts[i].state.players) {
@@ -52,7 +47,7 @@ class PlayerControls extends React.Component {
 		if (this.state.status === 'waitingRoom') {
 			return <div>You're all sit, hang out till everyone joins</div>;
 		} else if (this.state.status === 'answering') {
-			return <TakeAnswer player={this.props.player} prompts={this.state.prompts} />;
+			return <TakeAnswer player={this.props.player} prompts={this.state.prompts} wait={3000} />;
 		} else {
 			return <div>Let's get going!</div>;
 		}
